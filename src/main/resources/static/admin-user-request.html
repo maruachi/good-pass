@@ -57,21 +57,31 @@
         .submit-btn:hover {
             background-color: #0056b3;
         }
+        .notice {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>클라이밍장 정보</h1>
-    <form id="climbing-gym-form">
+    <h1>굿패스 서비스 신청하기</h1>
+    <div class="notice">
+        클라이밍장 관리자 신청을 위해 아래 양식을 작성해 주세요. <br>
+        <a href="more-details.html">자세히 보기</a>
+    </div>
+    <form id="admin-user-request-form">
         <div class="info-group">
             <label for="gym-name">클라이밍장 이름</label>
             <input type="text" id="gym-name" placeholder="클라이밍장 이름을 입력하세요" required>
         </div>
 
         <div class="info-group">
-            <label for="manager-name">센터장 성함</label>
-            <input type="text" id="manager-name" placeholder="센터장 성함을 입력하세요" required>
+            <label for="owner-name">센터장 성함</label>
+            <input type="text" id="owner-name" placeholder="센터장 성함을 입력하세요" required>
         </div>
 
         <div class="info-group">
@@ -87,6 +97,41 @@
         <button type="submit" class="submit-btn">신청하기</button>
     </form>
 </div>
+
+<script>
+    document.getElementById('admin-user-request-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const gymName = document.getElementById('gym-name').value;
+        const managerName = document.getElementById('owner-name').value;
+        const contact = document.getElementById('contact').value;
+        const email = document.getElementById('email').value;
+
+        const data = {
+            climbingGymName: gymName,
+            climbingGymOwner: managerName,
+            contact: contact,
+            email: email
+        };
+
+        fetch('http://localhost:8080/admin-user/request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('신청이 성공적으로 완료되었습니다.');
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                alert('신청 중 오류가 발생했습니다.');
+                console.error('Error:', error);
+            });
+    });
+</script>
 
 </body>
 </html>
